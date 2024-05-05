@@ -7,11 +7,11 @@ import {
 import { config } from "./config";
 import "dotenv/config";
 import * as fs from "fs";
-import { Command, CommandData } from "discordoop";
+import { Command, Event } from "discordoop";
 
-class DNDBot extends Client {
+export class DNDBot extends Client {
     // Properties
-    commands: Map<string, CommandData> = new Map();
+    commands: Map<string, Command> = new Map();
     colors = {
         s: [41, 191, 0],
         wip: [255, 255, 0],
@@ -33,6 +33,9 @@ class DNDBot extends Client {
             // register commands with discord
             await this.registerDiscordCommands();
 
+            // hook events
+            await this.hookEvents();
+
             r(true);
         });
     }
@@ -45,11 +48,10 @@ class DNDBot extends Client {
             let commandFiles = fs.readdirSync("./commands/");
 
             commandFiles.forEach(async (name) => {
-                let command = await require(
-                    "./commands/" + name
-                ) as unknown as Command;
+                let command = (await require("./commands/" +
+                    name)) as unknown as Command;
 
-                this.commands.set(name, command.data);
+                this.commands.set(command.data.name, command);
             });
 
             r(true);
@@ -62,8 +64,9 @@ class DNDBot extends Client {
             let commandManager = this.application?.commands;
             let discordFriendlyCommands: Array<ApplicationCommandData> = [];
 
-            this.commands.forEach((data, name) => {
+            this.commands.forEach((cmd, name) => {
                 let commandType;
+                let data = cmd.data;
 
                 switch (data.runContext) {
                     case "CHI":
@@ -98,13 +101,29 @@ class DNDBot extends Client {
                 });
         });
     }
+
+    // Connect callback functions to events
+    async hookEvents(): Promise<boolean> {
+        return new Promise(async (r) => {
+            let eventFiles = fs.readdirSync("./events/");
+
+            eventFiles.forEach(async (name) => {
+                let event = (await require("./events/" +
+                    name)) as unknown as Event;
+
+                event.init(this);
+            });
+
+            r(true);
+        });
+    }
 }
 
-const client = new DNDBot(config.clientOpts);
+export const client = new DNDBot(config.clientOpts);
 
 client.on("ready", () => {
     let initPromise = client.init();
-
+    
     initPromise.then(() => {
         console.log("Initialization complete.");
     });
