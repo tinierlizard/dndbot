@@ -3,3 +3,4 @@ config.js
 .prettierrc
 nodemon.json
 .env
+package-lock.json
