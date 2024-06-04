@@ -8,7 +8,35 @@ import { config } from "./config";
 import "dotenv/config";
 import * as fs from "fs";
 import { Command, Event } from "discordoop";
+import express from 'express';
+import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
+import { DiscordPong } from "./utilts";
 
+// Create express app
+const app = express();
+// Parse request body, verify incoming requests using discord-interactions
+app.use(
+    express.json({
+        verify: DiscordPong(process.env.PUBLIC_KEY)
+    })
+)
+
+/** 
+ * Interactions endpoint
+*/
+app.post('/interactions', async function(req, res) {
+    const {type, data} = req.body;
+
+    if (type == InteractionType.PING) {
+        return res.send({
+            type: InteractionResponseType.PONG
+        });
+    }
+
+    console.log(req.body);
+})
+
+// Export DNDBot class
 export class DNDBot extends Client {
     // Properties
     commands: Map<string, Command> = new Map();
@@ -125,8 +153,14 @@ client.on("ready", () => {
     let initPromise = client.init();
     
     initPromise.then(() => {
-        console.log("Initialization complete.");
+        console.log("Initialization complete");
     });
 });
 
-client.login(process.env.TOKEN);
+// Login to client
+client.login(process.env.BOT_TOKEN);
+
+// Listen on ngrok server
+app.listen(3000, () => {
+    console.log('Listening on port 3000');
+})
