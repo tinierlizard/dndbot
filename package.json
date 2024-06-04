@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "discord.js": "14.14.1",
     "discordoop": "github:tinierlizard/discordoop",
     "dotenv": "^16.4.5"
   }

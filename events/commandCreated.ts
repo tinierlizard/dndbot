@@ -13,16 +13,10 @@ class Heartbeat extends Event {
         let interaction: CommandInteraction = args[0];
 
         if (interaction.isCommand()) {
-            console.log("interaction is command");
-            console.log(interaction.commandName);
             let commands: Map<string, Command> = client.commands;
-            console.log(commands);
-
             let ourCommand = commands.get(interaction.commandName);
 
             if (ourCommand) {
-                console.log("Found command, running");
-                console.log(ourCommand);
                 let cmdPromise = ourCommand.run!(
                     interaction as CommandInteraction
                 );
