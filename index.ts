@@ -91,7 +91,7 @@ export class DNDBot extends Client {
             });
 
             await commandManager!
-                .set(discordFriendlyCommands, "1039622809661489182")
+                .set(discordFriendlyCommands, "1236133278214393927")
                 .then((e) => {
                     r(true);
                 })
