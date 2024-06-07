@@ -1,6 +1,4 @@
 import {
-    ApplicationCommandData,
-    ApplicationCommandType,
     Client,
     ClientOptions,
 } from "discord.js";
@@ -9,7 +7,7 @@ import "dotenv/config";
 import * as fs from "fs";
 import { Command, Event } from "discordoop";
 import express from 'express';
-import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
+import { InteractionResponseType, InteractionType } from "discord-interactions";
 import { DiscordPong } from "./utilts";
 
 // Create express app
@@ -58,9 +56,6 @@ export class DNDBot extends Client {
             // register commands locally
             await this.registerLocalCommands();
 
-            // register commands with discord
-            await this.registerDiscordCommands();
-
             // hook events
             await this.hookEvents();
 
@@ -83,50 +78,6 @@ export class DNDBot extends Client {
             });
 
             r(true);
-        });
-    }
-
-    // Register local commands with Discord
-    async registerDiscordCommands(): Promise<boolean> {
-        return new Promise(async (r) => {
-            let commandManager = this.application?.commands;
-            let discordFriendlyCommands: Array<ApplicationCommandData> = [];
-
-            this.commands.forEach((cmd, name) => {
-                let commandType;
-                let data = cmd.data;
-
-                switch (data.runContext) {
-                    case "CHI":
-                        commandType = ApplicationCommandType.ChatInput;
-                        break;
-                    case "MSG":
-                        commandType = ApplicationCommandType.Message;
-                        break;
-                    case "USER":
-                        commandType = ApplicationCommandType.User;
-                        break;
-                }
-
-                discordFriendlyCommands.push({
-                    name: data.name,
-                    description: data.desc,
-                    options: data.options,
-                    type: commandType,
-                    nsfw: data.isNSFW,
-                    dmPermission: false,
-                });
-            });
-
-            await commandManager!
-                .set(discordFriendlyCommands, "1236133278214393927")
-                .then((e) => {
-                    r(true);
-                })
-                .catch((err) => {
-                    console.error(err);
-                    r(false);
-                });
         });
     }
 

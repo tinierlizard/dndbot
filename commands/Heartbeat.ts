@@ -1,10 +1,14 @@
-import { CommandInteraction, CacheType, EmbedBuilder, EmbedData } from "discord.js";
+import {
+    CommandInteraction,
+    CacheType,
+    EmbedBuilder,
+} from "discord.js";
 import { Command, StatusMessage } from "discordoop";
 
 class Heartbeat extends Command {
     constructor() {
         super({
-            name: "heartbeat",
+            name: "testcommand",
             isNSFW: false,
             runContext: "CHI",
             desc: "Simple heartbeat command",
@@ -15,12 +19,14 @@ class Heartbeat extends Command {
         return new Promise(async (r) => {
             console.log("Command ran");
             let embed = new EmbedBuilder()
-                .setDescription("I'm alive! I promise!\nP.S. If you're running into a problem, ping <@!271714172201467905> for help!")
+                .setDescription(
+                    "I'm alive! I promise!\nP.S. If you're running into a problem, ping <@!271714172201467905> for help!"
+                )
                 .setTimestamp();
 
             int.reply({
                 embeds: [embed],
-                fetchReply: false
+                fetchReply: false,
             })
                 .then(() => {
                     r({ code: "200 OK", message: "Message sent successfully" });
