@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node index.ts",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "register": "node commands.ts"
   },
   "dependencies": {
     "discord-interactions": "^3.4.0",
