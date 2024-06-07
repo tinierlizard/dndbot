@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node index.ts",
     "dev": "nodemon index.ts",
-    "register": "node commands.ts"
+    "register": "node commands.ts",
+    "ngrok": "ngrok http 3000 --domain robust-exotic-macaque.ngrok-free.app"
   },
   "dependencies": {
     "discord-interactions": "^3.4.0",
