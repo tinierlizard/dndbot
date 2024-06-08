@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "dev": "nodemon index.ts",
-    "register": "node commands.ts",
+    "register": "ts-node commands.ts",
     "ngrok": "ngrok http 3000 --domain robust-exotic-macaque.ngrok-free.app"
   },
   "dependencies": {
@@ -17,5 +17,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21"
-  }
+  },
+  "type": "module"
 }

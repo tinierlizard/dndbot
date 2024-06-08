@@ -8,10 +8,12 @@ import * as fs from "fs";
 import { Command, Event } from "discordoop";
 import express from 'express';
 import { InteractionResponseType, InteractionType } from "discord-interactions";
-import { DiscordPong } from "./utilts";
+import { DiscordPong } from "./utils";
+import { event as CommandCreated } from './events/commandCreated';
 
 // Create express app
 const app = express();
+
 // Parse request body, verify incoming requests using discord-interactions
 app.use(
     express.json({
@@ -31,7 +33,7 @@ app.post('/interactions', async function(req, res) {
         });
     }
 
-    console.log(req.body);
+    CommandCreated.run(type, data, req.body)
 })
 
 // Export DNDBot class
@@ -43,6 +45,7 @@ export class DNDBot extends Client {
         wip: [255, 255, 0],
         f: [255, 0, 0],
     };
+    guildID = '1236133278214393927';
 
     // Constructor
     constructor(options: ClientOptions) {
@@ -67,15 +70,14 @@ export class DNDBot extends Client {
     // This is what's stored in the Commands object in Client
     // They take the form of DOOP's Command interface
     async registerLocalCommands(): Promise<boolean> {
-        return new Promise((r) => {
-            let commandFiles = fs.readdirSync("./commands/");
-
-            commandFiles.forEach(async (name) => {
-                let command = (await require("./commands/" +
-                    name)) as unknown as Command;
+        return new Promise(async (r) => {
+            const commandFiles = fs.readdirSync('./commands/');
+            for (const file of commandFiles) {
+                const exports = await import('./commands/' + file);
+                let command = exports.command;
 
                 this.commands.set(command.data.name, command);
-            });
+            }
 
             r(true);
         });
@@ -86,12 +88,12 @@ export class DNDBot extends Client {
         return new Promise(async (r) => {
             let eventFiles = fs.readdirSync("./events/");
 
-            eventFiles.forEach(async (name) => {
-                let event = (await require("./events/" +
-                    name)) as unknown as Event;
+            for (const file of eventFiles) {
+                const exports = await import('./events/' + file);
+                let event = exports.event;
 
                 event.init(this);
-            });
+            }
 
             r(true);
         });

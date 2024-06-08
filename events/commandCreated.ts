@@ -1,36 +1,33 @@
 import { Events, CommandInteraction } from "discord.js";
 import { Command, Event, StatusMessage } from "discordoop";
 import { DNDBot, client } from "../index";
+import { InteractionType } from "discord-interactions";
 
-class Heartbeat extends Event {
+class CommandCreated extends Event {
     constructor() {
         super({
             type: Events.InteractionCreate,
         });
     }
 
-    public run(...args: any[]): void {
-        let interaction: CommandInteraction = args[0];
+    public run(type, data, body): void {
+        if (type == InteractionType.APPLICATION_COMMAND) {
+            for (const cmdDat of client.commands) {
+                const name = cmdDat[0];
+                const cmd = cmdDat[1];
 
-        if (interaction.isCommand()) {
-            let commands: Map<string, Command> = client.commands;
-            let ourCommand = commands.get(interaction.commandName);
-
-            if (ourCommand) {
-                let cmdPromise = ourCommand.run!(
-                    interaction as CommandInteraction
-                );
-
-                cmdPromise.then((res: StatusMessage) => {
-                    console.log(
-                        interaction.commandName +
-                            " - " +
-                            res.code +
-                            " " +
-                            (res.message != undefined ? res.message : "") +
-                            "."
-                    );
-                });
+                if (name == data.name) {
+                    cmd.run(body).then((r: StatusMessage) => {
+                        console.log(
+                            name +
+                                " - " +
+                                r.code +
+                                " " +
+                                (r.message != undefined ? r.message : "") +
+                                "."
+                        );
+                    });
+                }
             }
         }
     }
@@ -43,6 +40,4 @@ class Heartbeat extends Event {
     }
 }
 
-const command = new Heartbeat();
-
-module.exports = command;
+export const event = new CommandCreated();
