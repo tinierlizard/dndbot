@@ -1,6 +1,22 @@
 {
+  "name": "dndbot",
+  "version": "1.0.0",
+  "description": "DND Utilities bot, for user installation only",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts",
+    "register": "ts-node commands.ts",
+    "ngrok": "ngrok http 3000 --domain robust-exotic-macaque.ngrok-free.app"
+  },
   "dependencies": {
+    "discord-interactions": "^3.4.0",
     "discordoop": "github:tinierlizard/discordoop",
-    "dotenv": "^16.4.5"
-  }
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21"
+  },
+  "type": "module"
 }
