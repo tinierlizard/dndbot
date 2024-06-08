@@ -72,6 +72,7 @@ export class DNDBot extends Client {
     async registerLocalCommands(): Promise<boolean> {
         return new Promise(async (r) => {
             const commandFiles = fs.readdirSync('./commands/');
+
             for (const file of commandFiles) {
                 const exports = await import('./commands/' + file);
                 let command = exports.command;
