@@ -19,7 +19,6 @@ class hate extends Command {
 
     public run(int: any): Promise<StatusMessage> {
         return new Promise(async (r) => {
-            console.log(int);
             let embed = new EmbedBuilder()
                 .setDescription(
                     `this is an automated message to tell you that the rat fucking hates <@!${int.data.target_id}> <3\n`
