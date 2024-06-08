@@ -1,39 +1,62 @@
 import {
     EmbedBuilder,
+    ApplicationCommandOptionType
 } from "discord.js";
 import { Command, ContextTypes, IntegrationTypes, StatusMessage } from "discordoop";
 import { DiscordRequest } from "../utils";
 import { InteractionResponseFlags } from "discord-interactions";
 
-class Igor extends Command {
+class LPP extends Command {
+    quotes: Array<string>;
+
     constructor() {
         super({
-            name: "igor",
-            desc: "",
+            name: "lppquote",
+            desc: "Get a random quote from the original French version of Le Petit Prince",
             isNSFW: false,
             integrationTypes: [IntegrationTypes.USER],
-            commandType: "USER",
+            commandType: "CHI",
             contextTypes: [ContextTypes.BOT_DM, ContextTypes.GUILD, ContextTypes.PRIV_CHAN],
+            options: [
+                {
+                    name: "ephemeral",
+                    description: "whether the reply message is ephemeral",
+                    type: ApplicationCommandOptionType.Boolean,
+                    required: true
+                }
+            ]
         });
+
+        this.quotes = [
+            "Droit devant soi on ne peut pas aller bien loin",
+            "Mais j'etais trop jeune pour savoir l'aimer",
+            "On ne sait jamais",
+            "Tache d'etre heureux",
+            "Qu'est-ce que signifie, \"apprivoiser\"?",
+            "Le langage est source de malentendues",
+            "On ne voit bien qu'avec le coeur. L'essential est invisible pour les yeux.",
+            "Ce qui est important, ca ne se voit pas.",
+            "Je ne te quitterai pas"
+        ];
     }
 
     public run(int: any): Promise<StatusMessage> {
         return new Promise(async (r) => {
+            const opts: Array<any> = int.data.options;
+            const ephemeral = opts.filter((opt) => opt.name == 'ephemeral')[0].value;
             let embed = new EmbedBuilder()
                 .setDescription(
-                    "igor are artistuc <#=3"
+                    this.quotes[Math.floor(Math.random() * this.quotes.length)]
                 )
-                .setTimestamp()
-                .setImage('https://cdn.discordapp.com/attachments/1044381780540653702/1236594599368196096/yippee.jpg?ex=6664be37&is=66636cb7&hm=7858f62f6e75a3c228f39d4308e0c5e757b8d2ff43285be657ebde08d91c7ddb&')
-                .setColor([121, 32, 245]);
-
+                .setColor([66, 135, 245]);
+            
             await DiscordRequest(`/interactions/${int.id}/${int.token}/callback`, {
                 method: "POST",
                 body: {
                     type: 4,
                     data: {
                         embeds: [embed.toJSON()],
-                        // flags: InteractionResponseFlags.EPHEMERAL
+                        flags: (ephemeral ? InteractionResponseFlags.EPHEMERAL : 0)
                     }
                 },
             }).then((res) => {
@@ -61,4 +84,4 @@ class Igor extends Command {
     }
 }
 
-export const command = new Igor();
+export const command = new LPP();
