@@ -6,7 +6,7 @@ import {
 import { Command, ContextTypes, IntegrationTypes, StatusMessage } from "discordoop";
 import { DNDBot, client } from "../index";
 
-class Heartbeat extends Command {
+class ServerTest extends Command {
     constructor(client: DNDBot) {
         super({
             name: "servertest",
@@ -42,4 +42,4 @@ class Heartbeat extends Command {
     }
 }
 
-export const command = new Heartbeat(client);
+export const command = new ServerTest(client);

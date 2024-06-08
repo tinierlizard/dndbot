@@ -1,5 +1,5 @@
-import { Events, CommandInteraction } from "discord.js";
-import { Command, Event, StatusMessage } from "discordoop";
+import { Events } from "discord.js";
+import { Event, StatusMessage } from "discordoop";
 import { DNDBot, client } from "../index";
 import { InteractionType } from "discord-interactions";
 

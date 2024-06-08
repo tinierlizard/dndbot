@@ -3,15 +3,16 @@ import {
 } from "discord.js";
 import { Command, ContextTypes, IntegrationTypes, StatusMessage } from "discordoop";
 import { DiscordRequest } from "../utils";
+import { InteractionResponseFlags } from "discord-interactions";
 
-class Heartbeat extends Command {
+class Igor extends Command {
     constructor() {
         super({
-            name: "heartbeat",
-            desc: "Simple heartbeat command",
+            name: "igor",
+            desc: "",
             isNSFW: false,
-            integrationTypes: [IntegrationTypes.GUILD, IntegrationTypes.USER],
-            commandType: "CHI",
+            integrationTypes: [IntegrationTypes.USER],
+            commandType: "MSG",
             contextTypes: [ContextTypes.BOT_DM, ContextTypes.GUILD, ContextTypes.PRIV_CHAN],
         });
     }
@@ -21,9 +22,11 @@ class Heartbeat extends Command {
             console.log("Heartbeat ran");
             let embed = new EmbedBuilder()
                 .setDescription(
-                    "I'm alive! I promise!\nP.S. If you're running into a problem, ping <@!271714172201467905> for help!"
+                    "igor are artistuc <#=3"
                 )
-                .setTimestamp();
+                .setTimestamp()
+                .setImage('https://cdn.discordapp.com/attachments/1044381780540653702/1236594599368196096/yippee.jpg?ex=6664be37&is=66636cb7&hm=7858f62f6e75a3c228f39d4308e0c5e757b8d2ff43285be657ebde08d91c7ddb&')
+                .setColor([121, 32, 245]);
 
             await DiscordRequest(`/interactions/${int.id}/${int.token}/callback`, {
                 method: "POST",
@@ -31,7 +34,6 @@ class Heartbeat extends Command {
                     type: 4,
                     data: {
                         embeds: [embed.toJSON()],
-                        content: "hello!"
                         // flags: InteractionResponseFlags.EPHEMERAL
                     }
                 },
@@ -60,4 +62,4 @@ class Heartbeat extends Command {
     }
 }
 
-export const command = new Heartbeat();
+export const command = new Igor();
