@@ -61,13 +61,14 @@ class insult extends Command {
             let userData = int.data.resolved.users[int.data.target_id];
             let embed = new EmbedBuilder()
                 .setDescription(
-                    this.insults[Math.floor(Math.random() * this.insults.length)]
+                    this.insults[
+                        Math.floor(Math.random() * this.insults.length)
+                    ]
                 )
                 .setFooter({
                     text: `Yes, you, ${userData.global_name}.`,
-                    iconURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.webp`
+                    iconURL: `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.webp`,
                 });
-                
 
             await DiscordRequest(
                 `/interactions/${int.id}/${int.token}/callback`,
@@ -77,7 +78,6 @@ class insult extends Command {
                         type: 4,
                         data: {
                             embeds: [embed.toJSON()],
-                            // flags: InteractionResponseFlags.EPHEMERAL
                         },
                     },
                 }
@@ -92,17 +92,6 @@ class insult extends Command {
                     });
                 }
             });
-
-            // int.reply({
-            //     embeds: [embed],
-            //     fetchReply: false,
-            // })
-            //     .then(() => {
-            //         r({ code: "200 OK", message: "Message sent successfully" });
-            //     })
-            //     .catch((err) => {
-            //         r({ code: "400 ERR", message: err });
-            //     });
         });
     }
 }
