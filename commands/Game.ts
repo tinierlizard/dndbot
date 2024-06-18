@@ -32,11 +32,21 @@ class game extends Command {
 
         this.games = new Map();
 
-        this.games.set("vr", ["tabor", "rumble", "itr", "vtol"]);
+        this.games.set("vr", ["tabor", "rumble", "itr", "vtol", "ktane"]);
 
-        this.games.set("not", ["lvl0", "tewaw", "yomi", "cock", "r6", "bg3"]);
+        this.games.set("not", [
+            "lvl0",
+            "tewaw",
+            "yomi",
+            "cock",
+            "r6",
+            "bg3",
+            "mc",
+            "ultrakill",
+            "get the FUCK outta (my swamp)",
+        ]);
 
-        this.games.set("misc", ["anim"]);
+        this.games.set("misc", ["anim", "solo activities"]);
     }
 
     public run(int: any): Promise<StatusMessage> {
